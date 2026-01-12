@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Push - Apple Watch Notifications for Claude Code</title>
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --card: #16213e;
+            --accent: #e94560;
+            --text: #eaeaea;
+            --muted: #a0a0a0;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .tagline {
+            color: var(--muted);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .flow {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-family: monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+        h2 {
+            color: var(--accent);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        ol, ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        code {
+            background: var(--card);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        pre {
+            background: var(--card);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .warning {
+            background: #3d2020;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .warning strong {
+            color: var(--accent);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card);
+        }
+        th {
+            color: var(--accent);
+        }
+        .footer {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--card);
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Claude Push</h1>
+        <p class="tagline">Get Apple Watch haptic notifications when Claude Code needs your attention.</p>
+
+        <div class="flow">
+Claude asks question (PreToolUse hook)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;→ curl POST to Pushcut webhook<br>
+&nbsp;&nbsp;&nbsp;&nbsp;→ Pushcut sends push notification<br>
+&nbsp;&nbsp;&nbsp;&nbsp;→ iPhone/Apple Watch receives haptic ping
+        </div>
+
+        <h2>Setup</h2>
+
+        <h3>1. Install Pushcut</h3>
+        <ol>
+            <li>Download <a href="https://apps.apple.com/app/pushcut-shortcuts-automation/id1450936447">Pushcut</a> from the iOS App Store</li>
+            <li>Create a free account</li>
+            <li>Go to <strong>Notifications</strong> → tap <strong>+</strong></li>
+            <li>Create a notification named <code>Claude</code> with sound and haptic enabled</li>
+            <li>Copy the webhook URL</li>
+        </ol>
+
+        <h3>2. Test the Webhook</h3>
+        <pre><code>curl -X POST "https://api.pushcut.io/YOUR_SECRET/notifications/Claude"</code></pre>
+        <p>You should receive a notification on your phone/watch.</p>
+
+        <h3>3. Configure Claude Code</h3>
+        <p>Add to <code>~/.claude/settings.json</code>:</p>
+        <pre><code>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s -X POST 'https://api.pushcut.io/YOUR_SECRET/notifications/Claude'"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+        <h3>4. Restart Claude Code</h3>
+        <p>Hooks take effect after restart.</p>
+
+        <h2>VSCode Limitation</h2>
+
+        <div class="warning">
+            <strong>Important:</strong> The <code>PermissionRequest</code> and <code>Notification</code> hooks don't work in the VSCode extension due to a <a href="https://github.com/anthropics/claude-code/issues/8985">known bug (#8985)</a>.
+        </div>
+
+        <h3>Workaround</h3>
+        <p>Add this to your <code>~/.claude/CLAUDE.md</code>:</p>
+        <pre><code>## Push Notifications (VSCode)
+
+When working in VSCode, use `AskUserQuestion` to confirm before taking
+significant actions that would normally require permission. This triggers
+a push notification to alert the user on their Apple Watch.</code></pre>
+
+        <p>This instructs Claude to proactively ask questions, which triggers the <code>PreToolUse</code> hook that does work.</p>
+
+        <h2>What Works</h2>
+
+        <table>
+            <tr>
+                <th>Hook</th>
+                <th>CLI</th>
+                <th>VSCode</th>
+            </tr>
+            <tr>
+                <td>PreToolUse (AskUserQuestion)</td>
+                <td>✅</td>
+                <td>✅</td>
+            </tr>
+            <tr>
+                <td>PostToolUse</td>
+                <td>✅</td>
+                <td>✅</td>
+            </tr>
+            <tr>
+                <td>Notification</td>
+                <td>✅</td>
+                <td>❌</td>
+            </tr>
+            <tr>
+                <td>PermissionRequest</td>
+                <td>✅</td>
+                <td>❌</td>
+            </tr>
+        </table>
+
+        <div class="footer">
+            <p><a href="https://github.com/bbdaniels/claude-push">View on GitHub</a> · MIT License</p>
+        </div>
+    </div>
+</body>
+</html>
