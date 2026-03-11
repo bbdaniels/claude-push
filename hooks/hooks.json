@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "curl -s -H 'Title: Claude Code' -d 'Needs your attention' ntfy.sh/${NTFY_TOPIC}"
+            "command": "~/.claude/hooks/ntfy-notify.sh notification"
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "curl -s -H 'Title: Claude Code' -d 'Needs your attention' ntfy.sh/${NTFY_TOPIC}"
+            "command": "~/.claude/hooks/ntfy-notify.sh ask"
           }
         ]
       }
@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "curl -s -H 'Title: Claude Code' -d 'Needs your attention' ntfy.sh/${NTFY_TOPIC}"
+            "command": "~/.claude/hooks/ntfy-notify.sh permission"
           }
         ]
       }
