@@ -2,6 +2,8 @@
 
 Get Apple Watch haptic notifications when Claude Code needs attention.
 
+**[Documentation](https://www.benjaminbdaniels.com/claude-push/)** | **[GitHub](https://github.com/bbdaniels/claude-push)**
+
 ## How It Works
 
 ```
