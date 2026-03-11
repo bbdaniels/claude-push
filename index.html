@@ -4,144 +4,232 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Claude Push - Apple Watch Notifications for Claude Code</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #1a1a2e;
-            --card: #16213e;
-            --accent: #e94560;
-            --text: #eaeaea;
-            --muted: #a0a0a0;
+            --bg: #fafaf9;
+            --text: #1c1917;
+            --text-secondary: #57534e;
+            --accent: #292524;
+            --border: #e7e5e4;
+            --card-bg: #ffffff;
+            --link: #2563eb;
+            --link-hover: #1d4ed8;
+            --hover-bg: rgba(0, 0, 0, 0.04);
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --max-width: 960px;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #1a2332;
+                --text: #e5e5e5;
+                --text-secondary: #a3b1c2;
+                --accent: #e5e5e5;
+                --border: #2f3d4f;
+                --card-bg: #212c3b;
+                --link: #60a5fa;
+                --link-hover: #93bbfd;
+                --hover-bg: rgba(255, 255, 255, 0.06);
+                --shadow-color: rgba(0, 0, 0, 0.3);
+            }
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: var(--font-sans);
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            padding: 2rem;
         }
+        .rainbow-bar {
+            height: 10px;
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+        }
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px var(--shadow-color);
+        }
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        nav a:hover { color: var(--link); }
+        nav .nav-links a {
+            color: var(--text-secondary);
+            margin-left: 1.5rem;
+            font-weight: 500;
+        }
+        nav .nav-links a:hover { color: var(--link); }
         .container {
-            max-width: 800px;
+            max-width: var(--max-width);
             margin: 0 auto;
+            padding: 3rem 2rem;
         }
         h1 {
+            font-family: var(--font-serif);
             font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
+            color: var(--accent);
         }
         .tagline {
-            color: var(--muted);
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-        .flow {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            font-family: monospace;
-            font-size: 0.95rem;
-            overflow-x: auto;
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            margin-bottom: 2.5rem;
+            max-width: 640px;
         }
         h2 {
-            color: var(--accent);
-            margin-top: 2rem;
-            margin-bottom: 1rem;
+            font-family: var(--font-serif);
             font-size: 1.5rem;
-        }
-        ol, ul {
-            margin-left: 1.5rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
             margin-bottom: 1rem;
+            color: var(--accent);
         }
-        li {
+        h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
             margin-bottom: 0.5rem;
         }
-        code {
-            background: var(--card);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
+        p { margin-bottom: 1rem; }
+        a { color: var(--link); text-decoration: none; }
+        a:hover { color: var(--link-hover); text-decoration: underline; }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
         }
-        pre {
-            background: var(--card);
+        @media (max-width: 640px) {
+            .cards { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 1rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px var(--shadow-color);
+        }
+        .card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+        .card p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 0; }
+        pre {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
             overflow-x: auto;
             margin: 1rem 0;
+            font-size: 0.875rem;
+            line-height: 1.7;
         }
-        pre code {
-            background: none;
-            padding: 0;
+        code {
+            font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+            font-size: 0.875rem;
         }
-        a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .warning {
-            background: #3d2020;
-            border-left: 4px solid var(--accent);
-            padding: 1rem;
-            margin: 1.5rem 0;
-            border-radius: 0 8px 8px 0;
-        }
-        .warning strong {
-            color: var(--accent);
+        :not(pre) > code {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 1rem 0;
+            font-size: 0.95rem;
         }
         th, td {
-            padding: 0.75rem;
+            padding: 0.6rem 0.75rem;
             text-align: left;
-            border-bottom: 1px solid var(--card);
+            border-bottom: 1px solid var(--border);
         }
         th {
+            font-weight: 600;
             color: var(--accent);
+            border-bottom: 2px solid var(--border);
         }
-        .footer {
+        .note {
+            background: var(--card-bg);
+            border-left: 3px solid var(--link);
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
+        .note strong { color: var(--link); }
+        footer {
             margin-top: 3rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--card);
-            color: var(--muted);
-            font-size: 0.9rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
     </style>
 </head>
 <body>
+    <div class="rainbow-bar"></div>
+    <nav>
+        <a href="https://www.benjaminbdaniels.com">Benjamin B Daniels</a>
+        <div class="nav-links">
+            <a href="https://github.com/bbdaniels/claude-push">GitHub</a>
+        </div>
+    </nav>
+
     <div class="container">
         <h1>Claude Push</h1>
-        <p class="tagline">Get Apple Watch haptic notifications when Claude Code needs your attention.</p>
+        <p class="tagline">Get Apple Watch haptic notifications when Claude Code needs your attention. Uses ntfy.sh -- no account, no API key, no webhook URL.</p>
 
-        <div class="flow">
-Claude asks question (PreToolUse hook)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;→ curl POST to ntfy.sh<br>
-&nbsp;&nbsp;&nbsp;&nbsp;→ ntfy sends push notification<br>
-&nbsp;&nbsp;&nbsp;&nbsp;→ iPhone/Apple Watch receives haptic ping
+        <div class="cards">
+            <div class="card">
+                <h3>No Account Needed</h3>
+                <p>Built on ntfy.sh -- just pick a topic name and go. No API keys, no webhook URLs, no signup required.</p>
+            </div>
+            <div class="card">
+                <h3>PreToolUse Hooks</h3>
+                <p>Fires on AskUserQuestion events so you get a tap on your wrist whenever Claude needs input.</p>
+            </div>
+            <div class="card">
+                <h3>VSCode Workaround</h3>
+                <p>Works around the VSCode hook bug (#8985) by instructing Claude to use AskUserQuestion proactively.</p>
+            </div>
+            <div class="card">
+                <h3>Instant Setup</h3>
+                <p>Install ntfy on your phone, add a JSON block to settings, restart Claude Code. Done in under a minute.</p>
+            </div>
         </div>
 
-        <h2>Setup</h2>
+        <h2>How It Works</h2>
+        <pre><code>Claude asks question (PreToolUse hook)
+    -> curl POST to ntfy.sh
+    -> ntfy sends push notification
+    -> iPhone/Apple Watch receives haptic ping</code></pre>
+
+        <h2>Quick Start</h2>
 
         <h3>1. Install ntfy</h3>
-        <ol>
-            <li>Download <a href="https://apps.apple.com/app/ntfy/id1625396347">ntfy</a> from the iOS App Store</li>
-            <li>Open the app and subscribe to a topic (e.g. <code>claude-yourname-a1b2c3</code>)</li>
-        </ol>
+        <p>Download <a href="https://apps.apple.com/app/ntfy/id1625396347">ntfy</a> from the iOS App Store and subscribe to a topic (e.g. <code>claude-yourname-a1b2c3</code>).</p>
 
-        <div class="warning">
-            <strong>Note:</strong> ntfy topics are public -- anyone who knows the topic name can send messages to it. Use a random suffix to keep yours private (e.g. <code>claude-yourname-a1b2c3</code>). No account or API key needed.
+        <div class="note">
+            <strong>Privacy:</strong> ntfy topics are public. Anyone who knows the name can send to it. Use a random suffix to keep yours private.
         </div>
 
-        <h3>2. Test the Notification</h3>
+        <h3>2. Test the notification</h3>
         <pre><code>curl -d "test" ntfy.sh/YOUR_TOPIC</code></pre>
-        <p>You should receive a notification on your phone/watch.</p>
 
         <h3>3. Configure Claude Code</h3>
         <p>Add to <code>~/.claude/settings.json</code>:</p>
@@ -164,24 +252,7 @@ Claude asks question (PreToolUse hook)<br>
         <h3>4. Restart Claude Code</h3>
         <p>Hooks take effect after restart.</p>
 
-        <h2>VSCode Limitation</h2>
-
-        <div class="warning">
-            <strong>Important:</strong> The <code>PermissionRequest</code> and <code>Notification</code> hooks don't work in the VSCode extension due to a <a href="https://github.com/anthropics/claude-code/issues/8985">known bug (#8985)</a>.
-        </div>
-
-        <h3>Workaround</h3>
-        <p>Add this to your <code>~/.claude/CLAUDE.md</code>:</p>
-        <pre><code>## Push Notifications (VSCode)
-
-When working in VSCode, use `AskUserQuestion` to confirm before taking
-significant actions that would normally require permission. This triggers
-a push notification to alert the user on their Apple Watch.</code></pre>
-
-        <p>This instructs Claude to proactively ask questions, which triggers the <code>PreToolUse</code> hook that does work.</p>
-
-        <h2>What Works</h2>
-
+        <h2>Hook Compatibility</h2>
         <table>
             <tr>
                 <th>Hook</th>
@@ -190,29 +261,40 @@ a push notification to alert the user on their Apple Watch.</code></pre>
             </tr>
             <tr>
                 <td>PreToolUse (AskUserQuestion)</td>
-                <td>✅</td>
-                <td>✅</td>
+                <td>Yes</td>
+                <td>Yes</td>
             </tr>
             <tr>
                 <td>PostToolUse</td>
-                <td>✅</td>
-                <td>✅</td>
+                <td>Yes</td>
+                <td>Yes</td>
             </tr>
             <tr>
                 <td>Notification</td>
-                <td>✅</td>
-                <td>❌</td>
+                <td>Yes</td>
+                <td>No</td>
             </tr>
             <tr>
                 <td>PermissionRequest</td>
-                <td>✅</td>
-                <td>❌</td>
+                <td>Yes</td>
+                <td>No</td>
             </tr>
         </table>
 
-        <div class="footer">
-            <p><a href="https://github.com/bbdaniels/claude-push">View on GitHub</a> · MIT License</p>
+        <h2>VSCode Workaround</h2>
+        <div class="note">
+            <strong>Important:</strong> The <code>PermissionRequest</code> and <code>Notification</code> hooks don't work in VSCode due to a <a href="https://github.com/anthropics/claude-code/issues/8985">known bug (#8985)</a>.
         </div>
+        <p>Add this to your <code>~/.claude/CLAUDE.md</code> to instruct Claude to proactively ask questions, which triggers the working <code>PreToolUse</code> hook:</p>
+        <pre><code>## Push Notifications (VSCode)
+
+When working in VSCode, use `AskUserQuestion` to confirm before taking
+significant actions that would normally require permission. This triggers
+a push notification to alert the user on their Apple Watch.</code></pre>
+
+        <footer>
+            <p>&copy; 2025 Benjamin B Daniels</p>
+        </footer>
     </div>
 </body>
 </html>
