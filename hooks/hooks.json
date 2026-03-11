@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "curl -s -d 'Claude needs your attention' ntfy.sh/${NTFY_TOPIC}"
+            "command": "curl -s -H 'Title: Claude Code' -d 'Needs your attention' ntfy.sh/${NTFY_TOPIC}"
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "curl -s -d 'Claude needs your attention' ntfy.sh/${NTFY_TOPIC}"
+            "command": "curl -s -H 'Title: Claude Code' -d 'Needs your attention' ntfy.sh/${NTFY_TOPIC}"
           }
         ]
       }
@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "curl -s -d 'Claude needs your attention' ntfy.sh/${NTFY_TOPIC}"
+            "command": "curl -s -H 'Title: Claude Code' -d 'Needs your attention' ntfy.sh/${NTFY_TOPIC}"
           }
         ]
       }
