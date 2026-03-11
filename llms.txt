@@ -1,0 +1,16 @@
+# claude-push
+
+> Get Apple Watch haptic notifications when Claude Code needs attention.
+
+## What It Does
+A Claude Code hook plugin that sends push notifications via ntfy.sh when Claude asks a question, so you get a haptic ping on your Apple Watch or iPhone instead of polling the terminal.
+
+## Install
+```bash
+export NTFY_TOPIC=your-topic-name
+claude plugin add /path/to/claude-push
+```
+Requires the free [ntfy iOS app](https://apps.apple.com/app/ntfy/id1625396347) -- no account or API key needed.
+
+## How It Works
+Uses Claude Code's `PreToolUse` hook to intercept `AskUserQuestion` tool calls and fire a `curl POST` to `ntfy.sh/YOUR_TOPIC`. The ntfy service relays this as a native push notification. Works in both CLI and VSCode, though VSCode users should instruct Claude to prefer `AskUserQuestion` over `PermissionRequest`/`Notification` hooks due to a known bug (#8985).
