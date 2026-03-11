@@ -1,6 +1,6 @@
 # Claude Push
 
-Get Apple Watch haptic notifications when Claude Code needs your attention.
+Get Apple Watch haptic notifications when Claude Code needs attention.
 
 ## How It Works
 
@@ -36,7 +36,19 @@ curl -d "test" ntfy.sh/YOUR_TOPIC
 
 You should receive a notification on your phone/watch.
 
-### 3. Configure Claude Code
+### 3. Install the Plugin
+
+```bash
+# Set your ntfy topic
+export NTFY_TOPIC=your-topic-name
+
+# Install the plugin
+claude plugin add /path/to/claude-push
+```
+
+Or manually: copy the `hooks/hooks.json` entries into your `~/.claude/settings.json` hooks section, replacing `${NTFY_TOPIC}` with your actual topic name.
+
+### 4. Manual Setup (Alternative)
 
 Add to `~/.claude/settings.json`:
 
@@ -60,7 +72,7 @@ Add to `~/.claude/settings.json`:
 
 Replace `YOUR_TOPIC` with the topic you subscribed to in the ntfy app.
 
-### 4. Restart Claude Code
+### 5. Restart Claude Code
 
 Hooks take effect after restart.
 

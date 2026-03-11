@@ -1,0 +1,36 @@
+{
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s -d 'Claude needs your attention' ntfy.sh/${NTFY_TOPIC}"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s -d 'Claude needs your attention' ntfy.sh/${NTFY_TOPIC}"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s -d 'Claude needs your attention' ntfy.sh/${NTFY_TOPIC}"
+          }
+        ]
+      }
+    ]
+  }
+}

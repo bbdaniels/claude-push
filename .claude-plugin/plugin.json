@@ -1,0 +1,6 @@
+{
+  "name": "claude-push",
+  "version": "1.0.0",
+  "description": "Apple Watch haptic notifications when Claude Code needs attention",
+  "hooks": "hooks/hooks.json"
+}
