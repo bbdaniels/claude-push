@@ -1,8 +1,25 @@
 # Claude Push
 
+> **Deprecated.** Push notification support has been merged into [ClaudeHUD](https://github.com/bbdaniels/ClaudeHUD), a native macOS menu bar app for Claude Code. No manual hook setup needed -- just toggle the bell icon in the HUD header.
+
+---
+
 Get Apple Watch haptic notifications when Claude Code needs attention.
 
-**[Documentation](https://www.benjaminbdaniels.com/claude-push/)** | **[GitHub](https://github.com/bbdaniels/claude-push)**
+## Migration
+
+If you were using `claude-push`, you can replace it entirely with [ClaudeHUD](https://github.com/bbdaniels/ClaudeHUD):
+
+1. Clone and build ClaudeHUD
+2. Click the **bell icon** in the header
+3. Enable desktop and/or mobile notifications
+4. For mobile: enter your ntfy topic name and click Set
+
+ClaudeHUD installs the hook script and manages `~/.claude/settings.json` automatically. You can remove any existing `ntfy-notify.sh` entries from your hooks config.
+
+---
+
+The original documentation is preserved below for reference.
 
 ## How It Works
 
@@ -23,7 +40,7 @@ Notifications show `Claude (project-name)` as the title, with a human-readable s
 - No webhook URL to copy
 - Just pick a topic name and go
 
-## Setup
+## Setup (manual, legacy)
 
 ### 1. Install ntfy
 
@@ -41,21 +58,9 @@ curl -d "test" ntfy.sh/YOUR_TOPIC
 
 You should receive a notification on your phone/watch.
 
-### 3. Install the Plugin
+### 3. Manual Setup
 
-```bash
-# Set your ntfy topic
-export NTFY_TOPIC=your-topic-name
-
-# Install the plugin
-claude plugin add /path/to/claude-push
-```
-
-Or manually: copy the `hooks/hooks.json` entries into your `~/.claude/settings.json` hooks section, replacing `${NTFY_TOPIC}` with your actual topic name.
-
-### 4. Manual Setup (Alternative)
-
-Copy `hooks/ntfy-notify.sh` to `~/.claude/hooks/ntfy-notify.sh` and edit the `TOPIC` variable at the top. Then add to `~/.claude/settings.json`:
+Copy `hooks/ntfy-notify.sh` to `~/.claude/hooks/ntfy-notify.sh` and add to `~/.claude/settings.json`:
 
 ```json
 {
@@ -66,7 +71,7 @@ Copy `hooks/ntfy-notify.sh` to `~/.claude/hooks/ntfy-notify.sh` and edit the `TO
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/ntfy-notify.sh ask"
+            "command": "NTFY_TOPIC=your-topic ~/.claude/hooks/ntfy-notify.sh ask"
           }
         ]
       }
@@ -76,7 +81,7 @@ Copy `hooks/ntfy-notify.sh` to `~/.claude/hooks/ntfy-notify.sh` and edit the `TO
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/ntfy-notify.sh permission"
+            "command": "NTFY_TOPIC=your-topic ~/.claude/hooks/ntfy-notify.sh permission"
           }
         ]
       }
@@ -85,7 +90,7 @@ Copy `hooks/ntfy-notify.sh` to `~/.claude/hooks/ntfy-notify.sh` and edit the `TO
 }
 ```
 
-### 5. Restart Claude Code
+### 4. Restart Claude Code
 
 Hooks take effect after restart.
 
@@ -104,8 +109,6 @@ When working in VSCode, use `AskUserQuestion` to confirm before taking
 significant actions that would normally require permission. This triggers
 a push notification to alert the user on their Apple Watch.
 ```
-
-This instructs Claude to proactively ask questions, which triggers the `PreToolUse` hook that does work.
 
 ## What Works
 
