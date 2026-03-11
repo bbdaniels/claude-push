@@ -39,9 +39,9 @@ try:
         desc = inp.get('description', '')
         cmd = inp.get('command', inp.get('file_path', ''))
         if desc:
-            print(f'{tool}: {desc[:200]}')
+            print(desc[:200])
         elif cmd:
-            print(f'{tool}: {str(cmd)[:200]}')
+            print(str(cmd)[:200])
         elif tool == 'AskUserQuestion':
             print(get_question() or 'Has a question')
         else:
