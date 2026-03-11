@@ -6,25 +6,32 @@ Get Apple Watch haptic notifications when Claude Code needs your attention.
 
 ```
 Claude asks question (PreToolUse hook)
-    → curl POST to Pushcut webhook
-    → Pushcut sends push notification
-    → iPhone/Apple Watch receives haptic ping
+    -> curl POST to ntfy.sh
+    -> ntfy sends push notification
+    -> iPhone/Apple Watch receives haptic ping
 ```
+
+## Why ntfy
+
+- No account required
+- No API key
+- No webhook URL to copy
+- Just pick a topic name and go
 
 ## Setup
 
-### 1. Install Pushcut
+### 1. Install ntfy
 
-1. Download [Pushcut](https://apps.apple.com/app/pushcut-shortcuts-automation/id1450936447) from the iOS App Store
-2. Create a free account
-3. Go to **Notifications** → tap **+**
-4. Create a notification named `Claude` with sound and haptic enabled
-5. Copy the webhook URL
+1. Download [ntfy](https://apps.apple.com/app/ntfy/id1625396347) from the iOS App Store
+2. Open the app and tap **+** to subscribe to a topic
+3. Choose a topic name -- use a random suffix to keep it private (e.g. `claude-yourname-a1b2c3`)
 
-### 2. Test the Webhook
+Topics on ntfy.sh are public. Anyone who knows your topic name can send you notifications. A random suffix makes it effectively private.
+
+### 2. Test It
 
 ```bash
-curl -X POST "https://api.pushcut.io/YOUR_SECRET/notifications/Claude"
+curl -d "test" ntfy.sh/YOUR_TOPIC
 ```
 
 You should receive a notification on your phone/watch.
@@ -42,7 +49,7 @@ Add to `~/.claude/settings.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "curl -s -X POST 'https://api.pushcut.io/YOUR_SECRET/notifications/Claude'"
+            "command": "curl -s -d 'Claude needs your attention' ntfy.sh/YOUR_TOPIC"
           }
         ]
       }
@@ -50,6 +57,8 @@ Add to `~/.claude/settings.json`:
   }
 }
 ```
+
+Replace `YOUR_TOPIC` with the topic you subscribed to in the ntfy app.
 
 ### 4. Restart Claude Code
 
@@ -77,10 +86,10 @@ This instructs Claude to proactively ask questions, which triggers the `PreToolU
 
 | Hook | CLI | VSCode |
 |------|-----|--------|
-| PreToolUse (AskUserQuestion) | ✅ | ✅ |
-| PostToolUse | ✅ | ✅ |
-| Notification | ✅ | ❌ |
-| PermissionRequest | ✅ | ❌ |
+| PreToolUse (AskUserQuestion) | Yes | Yes |
+| PostToolUse | Yes | Yes |
+| Notification | Yes | No |
+| PermissionRequest | Yes | No |
 
 ## License
 

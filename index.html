@@ -122,24 +122,25 @@
 
         <div class="flow">
 Claude asks question (PreToolUse hook)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;→ curl POST to Pushcut webhook<br>
-&nbsp;&nbsp;&nbsp;&nbsp;→ Pushcut sends push notification<br>
+&nbsp;&nbsp;&nbsp;&nbsp;→ curl POST to ntfy.sh<br>
+&nbsp;&nbsp;&nbsp;&nbsp;→ ntfy sends push notification<br>
 &nbsp;&nbsp;&nbsp;&nbsp;→ iPhone/Apple Watch receives haptic ping
         </div>
 
         <h2>Setup</h2>
 
-        <h3>1. Install Pushcut</h3>
+        <h3>1. Install ntfy</h3>
         <ol>
-            <li>Download <a href="https://apps.apple.com/app/pushcut-shortcuts-automation/id1450936447">Pushcut</a> from the iOS App Store</li>
-            <li>Create a free account</li>
-            <li>Go to <strong>Notifications</strong> → tap <strong>+</strong></li>
-            <li>Create a notification named <code>Claude</code> with sound and haptic enabled</li>
-            <li>Copy the webhook URL</li>
+            <li>Download <a href="https://apps.apple.com/app/ntfy/id1625396347">ntfy</a> from the iOS App Store</li>
+            <li>Open the app and subscribe to a topic (e.g. <code>claude-yourname-a1b2c3</code>)</li>
         </ol>
 
-        <h3>2. Test the Webhook</h3>
-        <pre><code>curl -X POST "https://api.pushcut.io/YOUR_SECRET/notifications/Claude"</code></pre>
+        <div class="warning">
+            <strong>Note:</strong> ntfy topics are public -- anyone who knows the topic name can send messages to it. Use a random suffix to keep yours private (e.g. <code>claude-yourname-a1b2c3</code>). No account or API key needed.
+        </div>
+
+        <h3>2. Test the Notification</h3>
+        <pre><code>curl -d "test" ntfy.sh/YOUR_TOPIC</code></pre>
         <p>You should receive a notification on your phone/watch.</p>
 
         <h3>3. Configure Claude Code</h3>
@@ -152,7 +153,7 @@ Claude asks question (PreToolUse hook)<br>
         "hooks": [
           {
             "type": "command",
-            "command": "curl -s -X POST 'https://api.pushcut.io/YOUR_SECRET/notifications/Claude'"
+            "command": "curl -s -d 'Claude needs your attention' ntfy.sh/YOUR_TOPIC"
           }
         ]
       }
