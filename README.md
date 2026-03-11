@@ -7,11 +7,14 @@ Get Apple Watch haptic notifications when Claude Code needs attention.
 ## How It Works
 
 ```
-Claude asks question (PreToolUse hook)
-    -> curl POST to ntfy.sh
-    -> ntfy sends push notification
+Claude needs attention (permission, question, etc.)
+    -> hook calls ntfy-notify.sh
+    -> extracts context (question text, tool name, command description)
+    -> sends push via ntfy.sh
     -> iPhone/Apple Watch receives haptic ping
 ```
+
+Notifications show `Claude (project-name)` as the title, with a human-readable summary as the body -- the actual question for AskUserQuestion, or `Bash: description` for commands. Duplicate notifications from overlapping hooks are suppressed.
 
 ## Why ntfy
 
@@ -52,7 +55,7 @@ Or manually: copy the `hooks/hooks.json` entries into your `~/.claude/settings.j
 
 ### 4. Manual Setup (Alternative)
 
-Add to `~/.claude/settings.json`:
+Copy `hooks/ntfy-notify.sh` to `~/.claude/hooks/ntfy-notify.sh` and edit the `TOPIC` variable at the top. Then add to `~/.claude/settings.json`:
 
 ```json
 {
@@ -63,7 +66,17 @@ Add to `~/.claude/settings.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "curl -s -d 'Claude needs your attention' ntfy.sh/YOUR_TOPIC"
+            "command": "~/.claude/hooks/ntfy-notify.sh ask"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/ntfy-notify.sh permission"
           }
         ]
       }
@@ -71,8 +84,6 @@ Add to `~/.claude/settings.json`:
   }
 }
 ```
-
-Replace `YOUR_TOPIC` with the topic you subscribed to in the ntfy app.
 
 ### 5. Restart Claude Code
 
